@@ -1,4 +1,4 @@
-import utils
+import Calculations
 
 def run_ei_calculation():
     """Runs the EI calculation with predefined data."""
@@ -10,7 +10,7 @@ def run_ei_calculation():
     PTX = [[1.0, 0.8], [0.7, 0.6]]
     Sinc = [[0.2, 0.3], [0.1, 0.2]]
 
-    EI = utils.calculate_ei(T, dUL, dDL, f, PTX, Sinc)
+    EI = Calculations.calculate_ei(T, dUL, dDL, f, PTX, Sinc)
 
     # Save result to file for main.ipynb
     with open("ei_result.txt", "w") as file:

@@ -1,4 +1,4 @@
-import utils
+import Calculations
 
 def run_dose_calculation():
     """Runs the dose calculation based on EI."""
@@ -8,7 +8,7 @@ def run_dose_calculation():
 
     T = 3600.0  # Same time as before
 
-    daily_dose = utils.calculate_daily_dose(EI, T)
+    daily_dose = Calculations.calculate_daily_dose(EI, T)
 
     # Save result to file
     with open("dose_result.txt", "w") as file:
