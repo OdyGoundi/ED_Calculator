@@ -3,7 +3,7 @@ import human_models
 import importlib
 from IPython.display import display, Image
 
-# Reload utils to ensure latest version
+# Reload Calculations to ensure latest version
 importlib.reload(Calculations)
 
 def run_bmi_calculation(height, weight):
@@ -12,16 +12,18 @@ def run_bmi_calculation(height, weight):
     bmi = Calculations.calculate_bmi(height, weight)
 
     # Find the closest human model
-    human_mod = human_models.get_human_models()
     closest_model = human_models.find_closest_model(bmi)
 
     # Get the image path
+    human_mod = human_models.get_human_models()
     image_path = human_mod[closest_model]["Image"]
 
+    # ✅ Print message for debugging
     print(f"\nYour BMI: {bmi:.2f}")
-    print(f"The closest human model to you is: {closest_model}")
+    print(f"✅ The closest human model to you is: {closest_model} (BMI: {human_mod[closest_model]['BMI']})")
 
-    # Display the model image
+    # ✅ Display the model image
     display(Image(filename=image_path, width=150))
 
-    return closest_model
+    return closest_model  # ✅ Ensure it returns the closest model
+
