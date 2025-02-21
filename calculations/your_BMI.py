@@ -1,15 +1,15 @@
-import Calculations
+from calculations import Basic_operations
 import human_models
 import importlib
 from IPython.display import display, Image
 
 # Reload Calculations to ensure latest version
-importlib.reload(Calculations)
+importlib.reload(Basic_operations)
 
 def run_bmi_calculation(height, weight):
     """Runs the BMI calculation based on provided height and weight."""
     
-    bmi = Calculations.calculate_bmi(height, weight)
+    bmi = Basic_operations.calculate_bmi(height, weight)
 
     # Find the closest human model
     closest_model = human_models.find_closest_model(bmi)

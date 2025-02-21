@@ -1,4 +1,4 @@
-import Calculations  # Ensure utils.py is in the same directory
+from calculations import Basic_operations 
 
 def run_sar_calculation():
     """Runs the SAR calculation."""
@@ -6,7 +6,7 @@ def run_sar_calculation():
     tissue_masses = [0.01, 0.015, 0.02]
     power_densities = [15.0, 25.0, 30.0]
 
-    sar = Calculations.calculate_sar(electric_field_strengths, tissue_masses, power_densities)
+    sar = Basic_operations.calculate_sar(electric_field_strengths, tissue_masses, power_densities)
 
     # Save result to file
     with open("sar_result.txt", "w") as file:
