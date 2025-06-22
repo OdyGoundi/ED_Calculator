@@ -14,6 +14,11 @@ def run_bmi_calculation(height, weight):
     # Find the closest human model
     closest_model = human_models.find_closest_model(bmi)
 
+    valid_models = ["Eartha", "Ella", "Louis"]
+    #if model not in valid_models:
+       # print(f"Model {model} not found in Excel. Using fallback: Eartha")
+    #model = "Eartha"
+
     # Get the image path
     human_mod = human_models.get_human_models()
     image_path = human_mod[closest_model]["Image"]

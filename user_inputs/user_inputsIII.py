@@ -1,8 +1,13 @@
 import ipywidgets as widgets
 from IPython.display import display, clear_output
 
+# Declare the global variable to hold the sliders
+time_sliders = {}
+
 def create_time_sliders():
     """Creates simple sliders for time allocation across different locations, ensuring total = 24 hours."""
+
+    global time_sliders  # Allow global access
 
     # Locations and initial values
     locations = ["On the Road", "At Work", "At Home", "Other Indoor", "Other Outdoor"]
@@ -15,6 +20,8 @@ def create_time_sliders():
         for i, loc in enumerate(locations)
     }
 
+    time_sliders = sliders  # Store globally for access from get_time_allocation()
+
     output = widgets.Output()
 
     def adjust_sliders(changed_slider_index):
@@ -23,14 +30,14 @@ def create_time_sliders():
         for i in range(changed_slider_index + 1):
             remaining_time -= sliders[locations[i]].value  # Keep earlier sliders fixed
 
-        remaining_sliders = locations[changed_slider_index + 1:]  # Only adjust later sliders
+        remaining_sliders = locations[changed_slider_index + 1:]
         remaining_sum = sum(sliders[loc].value for loc in remaining_sliders)
 
         if remaining_sum > 0:
             for loc in remaining_sliders:
-                sliders[loc].unobserve_all()  # Prevent loop
+                sliders[loc].unobserve_all()
                 sliders[loc].value = (sliders[loc].value / remaining_sum) * remaining_time
-                sliders[loc].observe(lambda change, idx=locations.index(loc): adjust_sliders(idx), names='value')  # Re-enable
+                sliders[loc].observe(lambda change, idx=locations.index(loc): adjust_sliders(idx), names='value')
 
         update_output()
 
@@ -42,12 +49,16 @@ def create_time_sliders():
             for loc in locations:
                 print(f"{loc}: {sliders[loc].value:.1f} hours")
 
-    # Attach event listeners
     for i, loc in enumerate(locations):
         sliders[loc].observe(lambda change, idx=i: adjust_sliders(idx), names='value')
 
-    # Display sliders and output
     display(widgets.VBox(list(sliders.values()) + [output]))
 
-    update_output()  # Show initial values
+    update_output()
 
+    return sliders
+
+
+def get_time_allocation():
+    """Returns the current time allocation values from the sliders."""
+    return {key: slider.value for key, slider in time_sliders.items()}

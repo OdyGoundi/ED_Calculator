@@ -1,18 +1,43 @@
-from calculations import Basic_operations
+from calculations.sar_matrix_loader import load_sar_matrix
+from parameters.enviroment_params import ENVIRONMENT_EMF
 
+# Map UI location names to EMF indoor/outdoor categories
+location_map = {
+    "On the Road": "outdoor",
+    "At Work": "indoor",
+    "At Home": "indoor",
+    "Other Indoor": "indoor",
+    "Other Outdoor": "outdoor"
+}
 
-def run_dose_calculation():
-    """Runs the dose calculation based on EI."""
-    # Read EI from file
-    with open("ei_result.txt", "r") as file:
-        EI = float(file.read())
+def calculate_dose(model, env, time_alloc):
+    """Calculate daily dose using SAR data and environment field values."""
+    sar_matrix = load_sar_matrix(model=model)
+    total_dose = 0
 
-    T = 3600.0  # Same time as before
+    if env in ENVIRONMENT_EMF:
+        for loc, t_hours in time_alloc.items():
+            env_type = location_map.get(loc)
+            if not env_type:
+                print(f"⚠️ Skipping unknown location: {loc}")
+                continue
 
-    daily_dose = Basic_operations.calculate_daily_dose(EI, T)
+            try:
+                freq_field_dict = ENVIRONMENT_EMF[env][env_type]
+            except KeyError:
+                print(f"⚠️ Environment type '{env_type}' not defined for environment '{env}'")
+                continue
 
-    # Save result to file
-    with open("dose_result.txt", "w") as file:
-        file.write(str(daily_dose))
-    
-    return daily_dose
+            for freq, E in freq_field_dict.items():
+                S = E**2 / 377  # Convert E field (V/m) to power density (W/m²)
+                for tissue, freq_data in sar_matrix.items():
+                    if freq in freq_data:
+                        sar = freq_data[freq] * 1e-3  # mW/kg → W/kg
+                        dose = sar * S * t_hours * 3600  # J/kg = W/kg × seconds
+                        total_dose += dose
+                        print(f"{tissue} @ {freq} ({loc}): {dose:.3e} J/kg")
+    else:
+        print(f"⚠️ Environment '{env}' not found in ENVIRONMENT_EMF.")
+
+    return total_dose
+

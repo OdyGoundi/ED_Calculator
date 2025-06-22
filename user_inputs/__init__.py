@@ -4,3 +4,4 @@ from .user_inputsIII import create_time_sliders
 from .user_inputsIV import create_usage_selection_ui
 from .bmi_ui import on_submit_button_clicked, create_bmi_ui
 from .environment_selector import create_environment_selector, on_image_click
+from .user_inputsIII import get_time_allocation
