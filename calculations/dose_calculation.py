@@ -1,5 +1,5 @@
 from calculations.sar_matrix_loader import load_sar_matrix
-from parameters.enviroment_params import ENVIRONMENT_EMF
+from parameters.environment_params import ENVIRONMENT_EMF
 
 # Map UI location names to EMF indoor/outdoor categories
 location_map = {
